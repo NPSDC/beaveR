@@ -50,6 +50,9 @@ getTSE <- function(treeTermFile,
     se <- tximeta::tximeta(coldata)
     txps <- getTxps(txps, se, ...)
     treeMerged <- mergeTrees(treeTerm, tnames = rownames(se))
-    mb <- mergeLeaves(treeCons, se[txps,])
+    treeMerged <- mergeTreeWithSE(treeMerged, se[txps,])
+    se <- se[treeMerged$tip.label,]
+
+    yAgg <- aggAssays(treeMerged, seMuscle[treeCons$tip,])
 
 }

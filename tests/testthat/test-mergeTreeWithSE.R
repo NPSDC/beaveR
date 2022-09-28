@@ -1,4 +1,5 @@
 test_that("mergeTreeWithSE working", {
+    skip("skip")
     dir <- "/home/noor/cbcb_rob/Uncertainity/brain_sim_nodtu/mode=gc_bias/post_type=gibbs_nrep=100_tf=100"
     clust_file <- file.path(dir, "terminus/no_threshold0/cluster_nwk.txt")
     trees <- ape::read.tree(clust_file)
