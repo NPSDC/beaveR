@@ -17,5 +17,7 @@ Imports:
     ape,
     fishpond,
     Matrix,
+    phangorn,
+    SingleCellExperiment,
     TreeSummarizedExperiment,
     tximeta

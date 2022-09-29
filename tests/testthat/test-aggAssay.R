@@ -1,4 +1,5 @@
-test_that("rowAgg with no groups", {
+test_that("rowAgg without rowInds", {
+    skip("skip")
     mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
     expect_error(performRowSumAgg(mat))
     mat <- matrix(seq(20), nrow=4, ncol=5)
@@ -8,24 +9,21 @@ test_that("rowAgg with no groups", {
     expect_error(performRowSumAgg(mat[1,]))
     expect_error(performRowSumAgg(mat[,1]))
 
-    # dir <- "/home/noor/cbcb_rob/Uncertainity/brain_sim_nodtu/mode=gc_bias/post_type=gibbs_nrep=100_tf=100"
-    # quant_dir <- file.path(dir, "out_sal")
-    # samples <- as.vector(outer(c(1), c(1,2), function(x,y) paste(x,y,sep="_")))
-    # quant_files <- file.path(quant_dir, samples, "quant.sf")
-    # coldata <- data.frame(files=quant_files, names=samples, condition = as.factor(rep(c(1,2),each=1)))
-
-    # se <- tximeta::tximeta(coldata)
 })
 
 test_that("rowAgg with rowInds", {
+    skip("skip")
     rowInds <- list(c(1:2),c(3:5))
     mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
     expect_error(performRowSumAgg(mat))
     mat <- matrix(seq(20), nrow=4, ncol=5)
 
-    expect_error(performRowSumAgg(mat, rowInds)) ## rowInds larger than matrix
-    expect_error(performRowSumAgg(mat[1,], rowInds)) ## rowInds larger than matrix
-    expect_error(performRowSumAgg(mat[1,], c(1:3))) ## rowInds larger than matrix
+    ## rowInds larger than rows of the matrix
+    expect_error(performRowSumAgg(mat, rowInds))
+    expect_error(performRowSumAgg(mat[1,], rowInds))
+
+    ## rowInds not list
+    expect_error(performRowSumAgg(mat[1,], c(1:3)))
 
     rowInds <- list(c(1:2),c(3:4))
     aggMat <- performRowSumAgg(mat, rowInds)
@@ -45,19 +43,76 @@ test_that("rowAgg with rowInds", {
     expected <- Matrix::Matrix(c(6,4,18,8,30,12,42,16,54,20), nrow=2, ncol=5, sparse=T)
     dimnames(expected)=list(c("g1", "g2"),colnames(mat))
     expect_equal(aggMat, expected)
-    #
-    #
-    # expect_equal(mat[1,], aggMat)
-    #
-    # aggMat <- performRowSumAgg(mat[,1])
-    # expect_equal(mat[,1], aggMat)
-    #
-    # aggMat <- performRowSumAgg(mat[,1])
-    # dir <- "/home/noor/cbcb_rob/Uncertainity/brain_sim_nodtu/mode=gc_bias/post_type=gibbs_nrep=100_tf=100"
-    # quant_dir <- file.path(dir, "out_sal")
-    # samples <- as.vector(outer(c(1), c(1,2), function(x,y) paste(x,y,sep="_")))
-    # quant_files <- file.path(quant_dir, samples, "quant.sf")
-    # coldata <- data.frame(files=quant_files, names=samples, condition = as.factor(rep(c(1,2),each=1)))
+})
 
-    # se <- tximeta::tximeta(coldata)
+test_that("colAgg without colInds", {
+    skip("skip")
+    mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
+    expect_error(performRowSumAgg(mat))
+    mat <- matrix(seq(20), nrow=4, ncol=5)
+    aggMat <- performColMeanAgg(mat)
+    expect_equal(mat, aggMat)
+
+    expect_error(performColMeanAgg(mat[1,]))
+    expect_error(performColMeanAgg(mat[,1]))
+
+})
+
+test_that("colAgg with colInds", {
+    skip("skip")
+    colInds <- list(c(1:2),c(3:6))
+    mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
+    expect_error(performColMeanAgg(mat))
+    mat <- matrix(seq(20), nrow=4, ncol=5)
+
+    ## colInds larger than number of columns
+    expect_error(performColMeanAgg(mat, colInds))
+    expect_error(performColMeanAgg(mat[1,], rowInds))
+
+    ## colInds not list
+    expect_error(performColMeanAgg(mat[1,], c(1:3)))
+
+    colInds <- list(c(1:2),c(3:5))
+    aggMat <- performColMeanAgg(mat, colInds)
+    expected <- matrix(c(3, 4, 5, 6, 13, 14, 15, 16), nrow=4, ncol=2)
+    dimnames(expected)=list(c(), c("Group1", "Group2"))
+    expect_equal(aggMat, expected)
+
+    colInds <- list("g1"=c(1:4),"g2"=c(5))
+    rownames(mat) <- paste("a", c(1:4), sep="")
+    aggMat <- performColMeanAgg(mat, colInds)
+    expected <- matrix(c(7,8,9,10,17,18,19,20), nrow=4, ncol=2)
+    dimnames(expected)=list(rownames(mat),c("g1", "g2"))
+    expect_equal(aggMat, expected)
+
+    ### Sparse Matrix
+    aggMat <- performColMeanAgg(Matrix::Matrix(mat,sparse=T), colInds)
+    expected <- Matrix::Matrix(c(7,8,9,10,17,18,19,20), nrow=4, ncol=2, sparse=T)
+    dimnames(expected)=list(rownames(mat),c("g1", "g2"))
+    expect_equal(aggMat, expected)
+
+})
+
+test_that("aggAssay", {
+    mat <- matrix(seq(20), nrow=5, ncol=4)
+    tree <- mat
+    expect_error(aggAssay(tree, 5, mat))
+    tree <- ape::rtree(5)
+    expect_error(aggAssay(tree, "aa", mat))
+    expect_error(aggAssay(tree, 5, mat[1,]))
+    expect_error(aggAssay(tree, 5, mat[1,]))
+    expect_error(aggAssay(tree, c(1:4,10), mat))
+    expect_error(aggAssay(tree, c(1:9), mat, list(1:5)))
+    aMat <- aggAssay(tree, c(1:5), mat)
+    expect_equal(aMat, mat)
+    aMat <- aggAssay(tree, c(1:6), mat)
+    eMat <- rbind(mat, colSums(mat))
+    rownames(eMat) <- c(rep("",5), "Node6")
+    expect_equal(aMat, eMat)
+    aMat <- aggAssay(tree, c(6), mat)
+    eMat <- matrix(colSums(mat), nrow=1, ncol=4)
+    rownames(eMat) <- "Node6"
+    expect_equal(aMat, eMat)
+    aMat <- aggAssay(tree, c(2), mat)
+    expect_equal(aMat, matrix(mat[2,], nrow=1))
 })

@@ -53,6 +53,6 @@ getTSE <- function(treeTermFile,
     treeMerged <- mergeTreeWithSE(treeMerged, se[txps,])
     se <- se[treeMerged$tip.label,]
 
-    yAgg <- aggAssays(treeMerged, seMuscle[treeCons$tip,])
+    yAgg <- aggAssays(treeMerged, se[treeMerged$tip,])
 
 }
