@@ -7,7 +7,7 @@ aggAssay <- function(tree, nodeIDs, seMat, groupInds = NULL) {
         if (any(is.na(nodeIDs)))
             stop("Node ids contain a non numeric")
     }
-    if (any(nodeIDs > length(tree$tip) + tree$Nnode))
+    if (any(nodeIDs > (length(tree$tip) + tree$Nnode)))
         stop("some nodeIDs are invalid")
     performMatCheck(seMat)
     mat <- createMat(seMat, list(), type = "row")
@@ -38,15 +38,13 @@ performColMeanAgg <- function(seM, colInds = NULL) {
     }
     performIndCheck(seM, colInds, type = "col")
     mat <- createMat(seM, colInds, type = "col")
-
+    FUN <- rowMeans
+    if (is(seM, "dgCMatrix")) {
+        FUN <- Matrix::rowMeans
+    }
     for (i in seq_along(colInds)) {
         if (length(colInds[[i]]) != 1) {
-            if (is(seM, "dgCMatrix")) {
-                mat[, i] <- Matrix::rowMeans(seM[, colInds[[i]]])
-            }
-            else {
-                mat[, i] <- rowMeans(seM[, colInds[[i]]])
-            }
+            mat[, i] <- FUN(seM[, colInds[[i]]])
         }
         else {
             mat[, i] <- seM[, colInds[[i]]]
@@ -64,15 +62,13 @@ performRowSumAgg <- function(seM, rowInds = NULL)
     }
     performIndCheck(seM, rowInds, type = "row")
     mat <- createMat(seM, rowInds, type = "row")
-
+    FUN <- colSums
+    if (is(seM, "dgCMatrix")) {
+        FUN <- Matrix::colSums
+    }
     for (i in seq_along(rowInds)) {
         if (length(rowInds[[i]]) != 1) {
-            if (is(seM, "dgCMatrix")) {
-                mat[i, ] <- Matrix::colSums(seM[rowInds[[i]], ])
-            }
-            else {
-                mat[i, ] <- colSums(seM[rowInds[[i]], ])
-            }
+            mat[i, ] <- FUN(seM[rowInds[[i]], ])
         }
         else {
             mat[i, ] <- seM[rowInds[[i]], ]

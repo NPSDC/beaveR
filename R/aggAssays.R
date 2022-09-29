@@ -1,3 +1,4 @@
+#' @importFrom SummarizedExperiment assays assayNames colData rowData metadata
 aggAssays <- function(tree, se)
 {
     if(!is(tree, "phylo")) {
@@ -7,30 +8,29 @@ aggAssays <- function(tree, se)
         stop("se should be either SummarizedExperiment or SingleCellExperiment")
     }
     innNodes <- nrow(se)+1:tree$Nnode
-    assaysList <- vector(mode = "list", length(assays(se)))
-    names(assaysList) <- assayNames(se)
-    for(n in names(asList)) {
-        if(n == "length") {
-            assaysList[[n]] <- assays(se)[[n]]
-        }
-        else{
-            assaysList[[n]] <- aggAssay(tree, c(1:nrow(se),innNodes), assays(se)[[n]])
-        }
-    }
+    assaysList <- vector(mode = "list", length(assays(se))-1)
+    lInd <- which(assayNames(se) != "length")
+    print(length(lInd))
+    assaysList <- lapply(assayNames(se)[lInd], function(n) {
+        print(n)
+        agg <- aggAssay(tree, c(1:nrow(se),innNodes), assays(se)[[n]])
+        print(dim(agg))
+        agg
+    })
+    names(assaysList) <- assayNames(se)[lInd]
 
     if(is(se, "SummarizedExperiment")) {
         y <- SummarizedExperiment::SummarizedExperiment(assays = assaysList,
                                   colData = colData(se),
-                                  metadata = metadata(se),
-                                  rowData = rowData(se))
+                                  metadata = metadata(se)
+                                  )
+        metadata(y)[["txpsAnn"]] = rowData(se)
         return(y)
     }
     y <- SingleCellExperiment::SingleCellExperiment(assays = assaysList,
                                                     colData = colData(se),
-                                                    metadata = metadata(se),
-                                                    rowData = rowData(se))
-    return(y)
-
-    metadata(y)$infRepsScaled=F
+                                                    metadata = metadata(se)
+                                                    )
+    metadata(y)[["txpsAnn"]] = rowData(se)
     y
 }

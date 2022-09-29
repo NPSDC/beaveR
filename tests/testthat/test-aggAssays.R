@@ -8,10 +8,14 @@ test_that("aggAssays", {
     trees <- ape::read.tree(clustFile)
     expect_error(aggAssays(trees, trees))
 
-    # se <- tximeta::tximeta(coldata)
-    expect_error(aggAssays(trees[[1]], trees))
+    se <- tximeta::tximeta(coldata)
+    SummarizedExperiment::assays(se) <- SummarizedExperiment::assays(se)[1:13]
+    tree <- mergeTrees(trees, tnames=rownames(se))
+    txps <- getTxps(txps=NULL, y=se, minN=1)
+    tree <- mergeTreeWithSE(tree, se[txps,])
+    seAgg <- aggAssays(tree, se[tree$tip,])
 
-    # tree <- mergeTrees(trees)
-    # tree <- mergeTrees(trees, tnames=rownames(se))
-
+    l <- length(tree$tip)
+    expect_equal(SummarizedExperiment::assays(seAgg)[["counts"]][l+1,],
+                 colSums(SummarizedExperiment::assays(seAgg)[["counts"]][1:l,]))
 })

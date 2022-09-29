@@ -1,5 +1,4 @@
 mergeTreeWithSE <- function(tree, se) {
-    skip("skip")
     txps <- suppressWarnings(as.numeric(tree$tip))
     if(!all(is.na(txps))){
         stop("tree tips contain numeric transcripts")
