@@ -54,5 +54,6 @@ getTSE <- function(treeTermFile,
     se <- se[treeMerged$tip.label,]
 
     seAgg <- aggAssays(treeMerged, se)
+    seAgg
     ## send rowData
 }
