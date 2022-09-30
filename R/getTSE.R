@@ -11,7 +11,7 @@ getTxps <- function(txps, y, ...) {
     }
     if (is.null(txps)) {
         y <- labelKeep(y, ...)
-        if (sum(mcols(y)[["keep"]]) == 0) {
+        if (sum(SummarizedExperiment::mcols(y)[["keep"]]) == 0) {
             stop("No txps match the filtering criteria, change either minN or minCount")
         }
         txps <- rownames(y)[mcols(y)[["keep"]]]
@@ -21,6 +21,17 @@ getTxps <- function(txps, y, ...) {
             stop("txps provided missing in the data")
     }
     return(txps)
+}
+
+#' @export
+makeTSEFromSE <- function(se, tree) {
+    if(!(is(se, "SummarizedExperiment") | is(se, "SingleCellExperiment"))) {
+        stop("se can only come from SummarizedExperiment/SingleCellExperiment")
+    }
+    if(!is(tree, "phylo")) {
+        stop("tree should be from phylo class")
+    }
+    tree$node.tip <- as.character(paste("Inn",length(tree$tip)+1:tree$Nnode))
 }
 
 #' @param treeTermFile
@@ -48,9 +59,9 @@ getTSE <- function(treeTermFile,
         )
     }
     se <- tximeta::tximeta(coldata)
-    txps <- getTxps(txps, se, ...)
+    txpsFilt <- getTxps(txps, se, ...)
     treeMerged <- mergeTrees(treeTerm, tnames = rownames(se))
-    treeMerged <- mergeTreeWithSE(treeMerged, se[txps,])
+    treeMerged <- mergeTreeWithSE(treeMerged, txpsFilt)
     se <- se[treeMerged$tip.label,]
 
     seAgg <- aggAssays(treeMerged, se)

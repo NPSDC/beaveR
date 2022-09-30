@@ -1,10 +1,13 @@
-aggAssays <- function(tree, se)
+aggAssays <- function(tree, se, groupInds = NULL)
 {
     if(!is(tree, "phylo")) {
         stop("tree should be of class phylo")
     }
     if(!(is(se, "SummarizedExperiment") | is(se, "SingleCellExperiment"))) {
         stop("se should be either SummarizedExperiment or SingleCellExperiment")
+    }
+    if(!is.null(groupInds) & !is(groupInds, "list")) {
+        stop("groupInds is not list")
     }
     assays <- SummarizedExperiment::assays
     assayNames <- SummarizedExperiment::assayNames
@@ -20,13 +23,12 @@ aggAssays <- function(tree, se)
     innNodes <- nrow(se)+1:tree$Nnode
     assaysList <- vector(mode = "list", length(assays(se))-1)
     lInd <- which(assayNames(se) != "length")
-    print(length(lInd))
+    print("Aggregation Started")
     assaysList <- lapply(assayNames(se)[lInd], function(n) {
-        print(n)
-        agg <- aggAssay(tree, c(1:nrow(se),innNodes), assays(se)[[n]])
+        agg <- aggAssay(tree, c(1:nrow(se),innNodes), assays(se)[[n]], groupInds = groupInds)
     })
     names(assaysList) <- assayNames(se)[lInd]
-
+    print("Aggregation Ended")
     if(is(se, "SummarizedExperiment")) {
         y <- SummarizedExperiment::SummarizedExperiment(assays = assaysList,
                                   colData = colData(se)
@@ -37,12 +39,7 @@ aggAssays <- function(tree, se)
         )
     }
     metadata <- metadata(se)
-    metadata[["txpsAnn"]] = rowData(se)
+    metadata[["txpsAnn"]] <- rowData(se)
     metadata(y) <- metadata
     y
-}
-if(F) {
-   a=1
-} else {
-    a=2
 }

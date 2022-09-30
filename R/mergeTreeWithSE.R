@@ -1,13 +1,13 @@
-mergeTreeWithSE <- function(tree, se) {
+mergeTreeWithSE <- function(tree, txpsFilt) {
     txps <- suppressWarnings(as.numeric(tree$tip))
     if(!all(is.na(txps))){
         stop("tree tips contain numeric transcripts")
     }
-    missing_txps <- setdiff(rownames(se), tree$tip.label)
-    if(length(missing_txps) > 0)
+    missingTxps <- setdiff(txpsFilt, tree$tip.label)
+    if(length(missingTxps) > 0)
     {
-        print(paste("Missing txps", length(missing_txps)))
-        remLeaves <- paste(as.character(missing_txps), collapse = ",")
+        print(paste("Missing txps", length(missingTxps)))
+        remLeaves <- paste(as.character(missingTxps), collapse = ",")
         nwk <- ape::write.tree(tree)
         nwk <- substr(nwk, 2, nchar(nwk)-2)
         nwk <- paste("(", remLeaves, ",", nwk, ");", sep = "")

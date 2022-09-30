@@ -11,6 +11,7 @@ test_that("rowAgg without rowInds", {
 })
 
 test_that("rowAgg with rowInds", {
+
     rowInds <- list(c(1:2),c(3:5))
     mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
     expect_error(performRowSumAgg(mat))
@@ -44,7 +45,6 @@ test_that("rowAgg with rowInds", {
 })
 
 test_that("colAgg without colInds", {
-
     mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
     expect_error(performRowSumAgg(mat))
     mat <- matrix(seq(20), nrow=4, ncol=5)
@@ -57,7 +57,6 @@ test_that("colAgg without colInds", {
 })
 
 test_that("colAgg with colInds", {
-    skip("skip")
     colInds <- list(c(1:2),c(3:6))
     mat <- matrix(paste("a", seq(20)), nrow=4, ncol=5)
     expect_error(performColMeanAgg(mat))

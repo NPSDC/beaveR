@@ -1,20 +1,25 @@
 test_that("mergeTree working", {
-    skip("skip")
-    dir <- "/home/noor/cbcb_rob/Uncertainity/brain_sim_nodtu/mode=gc_bias/post_type=gibbs_nrep=100_tf=100"
-    clust_file <- file.path(dir, "terminus/no_threshold0/cluster_nwk.txt")
-    trees <- ape::read.tree(clust_file)
+    dir <- "../../extdata/brain_sim_nodtu_small_example"
+    clustFile <- file.path(dir, "group_nwk.txt")
+    trees <- ape::read.tree(clustFile)
 
     tree <- mergeTrees(trees)
     lengths <- sum(sapply(trees, function(tree) length(tree$tip)))
     expect_equal(lengths, length(tree$tip))
 
-    quant_dir <- file.path(dir, "out_sal")
-    samples <- as.vector(outer(c(1), c(1,2), function(x,y) paste(x,y,sep="_")))
-    quant_files <- file.path(quant_dir, samples, "quant.sf")
-    coldata <- data.frame(files=quant_files, names=samples, condition = as.factor(rep(c(1,2),each=1)))
+    quantDir <- file.path(dir, "out_sal")
+    samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep="_")))
+    quantFiles <- file.path(quantDir, samples, "quant.sf")
+    coldata <- data.frame(files=quantFiles, names=samples)
     se <- tximeta::tximeta(coldata)
+
     expect_error(mergeTrees(trees, tnames = rownames(se)[1:100]))
     expect_error(mergeTrees(trees, tnames = 1:10))
+
+    treesCopy <- trees
+    treesCopy[[1]]$tip.label[1] <- as.character(as.numeric(treesCopy[[1]]$tip.label[1])+1e5)
+    expect_error(mergeTrees(treesCopy, tnames = rownames(se)))
+
     tree <- mergeTrees(trees, tnames = rownames(se))
     expect_equal(lengths, length(tree$tip))
 })
