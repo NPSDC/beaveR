@@ -31,7 +31,22 @@ makeTSEFromSE <- function(se, tree) {
     if(!is(tree, "phylo")) {
         stop("tree should be from phylo class")
     }
-    tree$node.tip <- as.character(paste("Inn",length(tree$tip)+1:tree$Nnode))
+    assays <- SummarizedExperiment::assays
+    # assayNames <- SummarizedExperiment::assayNames
+    # rowData <- SummarizedExperiment::rowData
+    colData <- SummarizedExperiment::colData
+    if(is(se, "SingleCellExperiment")) {
+        assays <- SingleCellExperiment::assays
+        # assayNames <- SingleCellExperiment::assayNames
+        # rowData <-SingleCellExperiment::rowData
+        colData <- SingleCellExperiment::colData
+    }
+    tree$node.label <- as.character(paste("Node",length(tree$tip)+1:tree$Nnode,sep=""))
+    tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(
+        assays = assays(se),
+        colData = colData(se),
+        metadata = metadata(se),
+        rowTree = tree)
 }
 
 #' @param treeTermFile
@@ -65,6 +80,6 @@ getTSE <- function(treeTermFile,
     se <- se[treeMerged$tip.label,]
 
     seAgg <- aggAssays(treeMerged, se)
-    seAgg
+    tse <- makeTSEFromSE(seAgg, treeMerged)
     ## send rowData
 }

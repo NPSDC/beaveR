@@ -18,8 +18,9 @@ test_that("check inputs", {
   clustFile <-"test-getTSE.R"
   expect_error(getTSE(clustFile, coldata))
 
-  # clustFile <- file.path(dir, "")
-  # expect_message(getTSE(clustFile, coldata))
+  clustFile <- file.path(dir, "group_nwk.txt")
+  tse <- getTSE(clustFile, coldata)
+  expect_s4_class(tse, "TreeSummarizedExperiment")
 })
 
 # test_that("wrong Term file", {

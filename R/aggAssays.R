@@ -1,3 +1,4 @@
+#' @export
 aggAssays <- function(tree, se, groupInds = NULL)
 {
     if(!is(tree, "phylo")) {
