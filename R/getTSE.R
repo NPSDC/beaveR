@@ -63,7 +63,7 @@ getTSE <- function(treeTermFile,
     if (!file.exists(treeTermFile)) {
         stop(paste("the file", treeTermFile, "does not exist"))
     }
-
+    print("reading tree")
     treeTerm <- ape::read.tree(treeTermFile) ## Reading tree
     if (is.null(treeTerm)) {
         stop(
@@ -80,6 +80,8 @@ getTSE <- function(treeTermFile,
     se <- se[treeMerged$tip.label,]
 
     seAgg <- aggAssays(treeMerged, se)
+    # seAgg <- fishpond::computeInfRV(seAgg, meanVariance = FALSE)
     tse <- makeTSEFromSE(seAgg, treeMerged)
-    ## send rowData
+    tse <- fishpond::computeInfRV(tse, meanVariance = FALSE)
+    tse
 }

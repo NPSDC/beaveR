@@ -22,13 +22,16 @@ aggAssays <- function(tree, se, groupInds = NULL)
     }
 
     innNodes <- nrow(se)+1:tree$Nnode
-    assaysList <- vector(mode = "list", length(assays(se))-1)
+    reqAssayNames <- intersect(c("counts", "abundance", assayNames(se)[grep("infRep", assayNames(se))]),
+                           assayNames(se))
+
+    assaysList <- vector(mode = "list", length(reqAssayNames))
     lInd <- which(assayNames(se) != "length")
     print("Aggregation Started")
-    assaysList <- lapply(assayNames(se)[lInd], function(n) {
+    assaysList <- lapply(reqAssayNames, function(n) {
         agg <- aggAssay(tree, c(1:nrow(se),innNodes), assays(se)[[n]], groupInds = groupInds)
     })
-    names(assaysList) <- assayNames(se)[lInd]
+    names(assaysList) <- reqAssayNames
     print("Aggregation Ended")
     if(is(se, "SummarizedExperiment")) {
         y <- SummarizedExperiment::SummarizedExperiment(assays = assaysList,
