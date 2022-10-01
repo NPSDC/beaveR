@@ -46,7 +46,7 @@ solveObj <- function(tse, metVec, type = "min") {
     pkg.globals[["globVec"]] <- rep(-100, length(metVec))
     tree <- TreeSummarizedExperiment::rowTree(tse)
 
-    node <- length(tree$tip)+1
+    node <- length(tree$tip) + 1
     optVal <- findOptSum(tree, metVec, node, type)
     optVals <- pkg.globals[["globVec"]]
 

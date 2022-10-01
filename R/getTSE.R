@@ -5,7 +5,7 @@
 #'
 #' @importFrom fishpond labelKeep
 getTxps <- function(txps, y, ...) {
-    nMissParams <- c(!missing(txps),!missing(y))
+    nMissParams <- c(!missing(txps), !missing(y))
     if (!all(nMissParams)) {
         stop("Missing Parameters to the function")
     }
@@ -14,7 +14,8 @@ getTxps <- function(txps, y, ...) {
         if (sum(SummarizedExperiment::mcols(y)[["keep"]]) == 0) {
             stop("No txps match the filtering criteria, change either minN or minCount")
         }
-        txps <- rownames(y)[mcols(y)[["keep"]]]
+        txps <-
+            rownames(y)[SummarizedExperiment::mcols(y)[["keep"]]]
     }
     else {
         if (!all(txps %in% rownames(y)))
@@ -25,28 +26,30 @@ getTxps <- function(txps, y, ...) {
 
 #' @export
 makeTSEFromSE <- function(se, tree) {
-    if(!(is(se, "SummarizedExperiment") | is(se, "SingleCellExperiment"))) {
+    if (!(is(se, "SummarizedExperiment") |
+          is(se, "SingleCellExperiment"))) {
         stop("se can only come from SummarizedExperiment/SingleCellExperiment")
     }
-    if(!is(tree, "phylo")) {
+    if (!is(tree, "phylo")) {
         stop("tree should be from phylo class")
     }
     assays <- SummarizedExperiment::assays
-    # assayNames <- SummarizedExperiment::assayNames
-    # rowData <- SummarizedExperiment::rowData
     colData <- SummarizedExperiment::colData
-    if(is(se, "SingleCellExperiment")) {
+    mcols <- SummarizedExperiment::mcols
+    if (is(se, "SingleCellExperiment")) {
         assays <- SingleCellExperiment::assays
-        # assayNames <- SingleCellExperiment::assayNames
-        # rowData <-SingleCellExperiment::rowData
         colData <- SingleCellExperiment::colData
     }
-    tree$node.label <- as.character(paste("Node",length(tree$tip)+1:tree$Nnode,sep=""))
+    tree$node.label <-
+        as.character(paste("Node", length(tree$tip) + 1:tree$Nnode, sep = ""))
     tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(
         assays = assays(se),
         colData = colData(se),
         metadata = metadata(se),
-        rowTree = tree)
+        rowTree = tree
+    )
+    mcols(tse) <- mcols(se)
+    tse
 }
 
 #' @param treeTermFile
@@ -77,7 +80,7 @@ getTSE <- function(treeTermFile,
     txpsFilt <- getTxps(txps, se, ...)
     treeMerged <- mergeTrees(treeTerm, tnames = rownames(se))
     treeMerged <- mergeTreeWithSE(treeMerged, txpsFilt)
-    se <- se[treeMerged$tip.label,]
+    se <- se[treeMerged$tip.label, ]
 
     seAgg <- aggAssays(treeMerged, se)
     # seAgg <- fishpond::computeInfRV(seAgg, meanVariance = FALSE)
