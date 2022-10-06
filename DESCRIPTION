@@ -27,4 +27,5 @@ Imports:
     SummarizedExperiment,
     SingleCellExperiment,
     TreeSummarizedExperiment,
-    tximeta
+    tximeta,
+    abind
