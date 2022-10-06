@@ -5,7 +5,7 @@ test_that("findSummStat works", {
     quantFiles <- file.path(quantDir, samples, "quant.sf")
     clustFile <- file.path(dir, "group_nwk.txt")
     coldata <- data.frame(files = quantFiles, names = samples)
-    tse <- makeTSE(clustFile, coldata)
+    tse <- buildTSE(clustFile, coldata)
     expect_error(findNodeInformation(coldata, coldata))
     expect_error(findNodeInformation(tse, "aa"))
     expect_error(findNodeInformation(tse, 400))

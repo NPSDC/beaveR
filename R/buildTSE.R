@@ -24,7 +24,7 @@ getTxps <- function(txps, y, ...) {
     return(txps)
 }
 
-makeTSEFromSE <- function(tree, se) {
+buildTSEFromSE <- function(tree, se) {
     if (!(is(se, "SummarizedExperiment") |
           is(se, "SingleCellExperiment"))) {
         stop("se can only come from SummarizedExperiment/SingleCellExperiment")
@@ -67,7 +67,7 @@ makeTSEFromSE <- function(tree, se) {
 #' @param ...
 #'
 #' @export
-makeTSE <- function(treeTermFile,
+buildTSE <- function(treeTermFile,
                    coldata,
                    txps = NULL,
                    ...) {
@@ -90,7 +90,7 @@ makeTSE <- function(treeTermFile,
     treeMerged <- mergeTreeWithSE(treeMerged, txpsFilt)
     se <- se[treeMerged$tip.label, ]
 
-    tse <- makeTSEFromSE(treeMerged, se)
+    tse <- buildTSEFromSE(treeMerged, se)
     tse <- fishpond::computeInfRV(tse, meanVariance = FALSE)
     tse
 }

@@ -5,12 +5,12 @@ test_that("scaledLFC", {
     samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep="_")))
     quantFiles <- file.path(quantDir, samples, "quant.sf")
     coldata <- data.frame(files=quantFiles, names=samples)
-    tse <- makeTSE(clustFile, coldata)
+    tse <- buildTSE(clustFile, coldata)
     expect_error(getScaledLFC(coldata, coldata))
     expect_error(getScaledLFC(tse, "condition"))
 
     coldata <- data.frame(files=quantFiles, names=samples,condition=factor(rep(1:2, each=6)))
-    tse <- makeTSE(clustFile, coldata)
+    tse <- buildTSE(clustFile, coldata)
 
     lfc <- getScaledLFC(tse, "condition")
     tree <- TreeSummarizedExperiment::rowTree(tse)
