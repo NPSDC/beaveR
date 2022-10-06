@@ -3,7 +3,6 @@
 export(aggAssays)
 export(getScaledLFC)
 export(makeTSE)
-export(makeTSEFromSE)
 export(mergeTrees)
 export(solveForOptimalCut)
 importFrom(SummarizedExperiment,assayNames)

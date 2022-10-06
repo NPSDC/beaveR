@@ -2,9 +2,9 @@ Package: beaveR
 Title: Processing the output from TreeTerminus
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Noor Pratap", "Singh", email = "noorpratap@gmail.com", role = c("aut", "cre")),
-    person("Michael", "Love", role = c("aut", "cre")),
-    person("Rob", "Patro", role = c("aut", "cre"))
+    person("Noor Pratap", "Singh", email="noorpratap@gmail.com", role = c("aut", "cre")),
+    person("Michael", "Love", role = c("aut", "ctb")),
+    person("Rob", "Patro", role = c("aut", "ctb"))
     )
 Description: Given the trees obtained from TreeTerminus for an RNASeq experiment
     along with Salmon quantified counts, it creates a TreeSummarizedExperiment
@@ -13,7 +13,6 @@ Description: Given the trees obtained from TreeTerminus for an RNASeq experiment
     are also provided to obtain summary statistics for a given node in the tree.
 Maintainer: Noor Pratap Singh <noorpratap@gmail.com>
 License: GPL-2
-VignetteBuilder: knitr
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
