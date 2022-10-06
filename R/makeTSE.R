@@ -59,14 +59,14 @@ makeTSEFromSE <- function(se, tree) {
 #' @param ...
 #'
 #' @export
-getTSE <- function(treeTermFile,
+makeTSE <- function(treeTermFile,
                    coldata,
                    txps = NULL,
                    ...) {
     if (!file.exists(treeTermFile)) {
         stop(paste("the file", treeTermFile, "does not exist"))
     }
-    print("reading tree")
+    message("reading tree")
     treeTerm <- ape::read.tree(treeTermFile) ## Reading tree
     if (is.null(treeTerm)) {
         stop(

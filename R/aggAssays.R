@@ -27,12 +27,12 @@ aggAssays <- function(tree, se, groupInds = NULL)
 
     assaysList <- vector(mode = "list", length(reqAssayNames))
     lInd <- which(assayNames(se) != "length")
-    print("Aggregation Started")
+    message("Aggregation Started")
     assaysList <- lapply(reqAssayNames, function(n) {
         agg <- aggAssay(tree, c(1:nrow(se),innNodes), assays(se)[[n]], groupInds = groupInds)
     })
     names(assaysList) <- reqAssayNames
-    print("Aggregation Ended")
+    message("Aggregation Ended")
     if(is(se, "SummarizedExperiment")) {
         y <- SummarizedExperiment::SummarizedExperiment(assays = assaysList,
                                   colData = colData(se)

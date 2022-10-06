@@ -1,10 +1,10 @@
 test_that("check inputs", {
-    expect_error(getTSE())
-    expect_error(getTSE("invalid", "quant file"))
+    expect_error(makeTSE())
+    expect_error(makeTSE("invalid", "quant file"))
 
     dir <- "../../extdata/brain_sim_nodtu_small_example"
     clustFile <- file.path(dir, "group_nwk.txt")
-    expect_error(getTSE(clustFile, "ff"))
+    expect_error(makeTSE(clustFile, "ff"))
 
     quantDir <- file.path(dir, "out_sal")
     samples <-
@@ -12,16 +12,16 @@ test_that("check inputs", {
             paste(x, y, sep = "_")))
     quantFiles <- file.path(quantDir, samples, "quant.sf")
     coldata <- data.frame(files = quantFiles)
-    expect_error(getTSE(clustFile, coldata))
+    expect_error(makeTSE(clustFile, coldata))
 
     coldata <- data.frame(files = quantFiles, names = samples)
-    # expect_message(getTSE(clust_file, coldata))
+    # expect_message(makeTSE(clust_file, coldata))
     #
-    clustFile <- "test-getTSE.R"
-    expect_error(getTSE(clustFile, coldata))
+    clustFile <- "test-makeTSE.R"
+    expect_error(makeTSE(clustFile, coldata))
 
     clustFile <- file.path(dir, "group_nwk.txt")
-    tse <- getTSE(clustFile, coldata)
+    tse <- makeTSE(clustFile, coldata)
     expect_s4_class(tse, "TreeSummarizedExperiment")
     mirv <- SummarizedExperiment::mcols(tse)[["meanInfRV"]]
     expect_equal(length(mirv), nrow(tse))

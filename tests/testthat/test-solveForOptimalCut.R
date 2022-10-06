@@ -7,7 +7,7 @@ test_that("testSolveObj", {
             paste(x, y, sep = "_")))
     quantFiles <- file.path(quantDir, samples, "quant.sf")
     coldata <- data.frame(files = quantFiles, names = samples)
-    tse <- getTSE(clustFile, coldata)
+    tse <- makeTSE(clustFile, coldata)
     tree <- TreeSummarizedExperiment::rowTree(tse)
     gamma <- 0.1
     l <- length(tree$tip)
@@ -20,7 +20,18 @@ test_that("testSolveObj", {
     expect_error(solveObj(tse, metVec[1:10]))
     expect_error(solveObj(tse, metVec, "ss"))
 
-    opt <- solveObj(tse, metVec, "min")
-    print(length(opt[["cut"]]))
-    print(length(opt[["optVal"]]))
+    opt <- solveForOptimalCut(tse, metVec, "min")
+    expect_length(opt, 2)
+    expect_equal(names(opt), c("cut", "optVal"))
+
+    expect_error(getScaledLFC(tse, "condition"))
+    coldata <- data.frame(files=quantFiles, names=samples,condition=factor(rep(1:2, each=6)))
+    tse <- makeTSE(clustFile, coldata)
+    lfc <- getScaledLFC(tse, "condition")
+    expect_length(lfc, nrow(tse))
+    metVec <- sizeDesc*lfc/SummarizedExperiment::mcols(tse)[["meanInfRV"]]
+    opt <- solveForOptimalCut(tse, metVec, "max")
+    expect_length(opt, 2)
+    expect_equal(names(opt), c("cut", "optVal"))
+
 })
