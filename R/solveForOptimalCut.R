@@ -24,11 +24,11 @@ solveForOptimalCut <- function(tse, metVec, type = "min") {
         if (type == "min")
             val <-
             min(metVec[node], sum(sapply(children, function(child)
-                findOptSum(tree, metVec, child))))
+                findOptSum(tree, metVec, child, type = type))))
         else
             val <-
             max(metVec[node], sum(sapply(children, function(child)
-                findOptSum(tree, metVec, child))))
+                findOptSum(tree, metVec, child, type = type))))
         pkg.globals[["globVec"]][node] <<- val
         return(val)
     }
