@@ -24,8 +24,7 @@ getTxps <- function(txps, y, ...) {
     return(txps)
 }
 
-#' @export
-makeTSEFromSE <- function(se, tree) {
+makeTSEFromSE <- function(tree, se) {
     if (!(is(se, "SummarizedExperiment") |
           is(se, "SingleCellExperiment"))) {
         stop("se can only come from SummarizedExperiment/SingleCellExperiment")
@@ -33,6 +32,15 @@ makeTSEFromSE <- function(se, tree) {
     if (!is(tree, "phylo")) {
         stop("tree should be from phylo class")
     }
+    l <- length(tree$tip.label)
+    if(l != nrow(se)) {
+        stop("number of leaves should be equal to number of rows in se")
+    }
+    if(!all(tree$tip.label %in% rownames(se))) {
+        stop("leaf set of tree is not same as the transcripts in se")
+    }
+    se <- se[tree$tip.label,]
+    seAgg <- aggAssays(tree, se)
     assays <- SummarizedExperiment::assays
     colData <- SummarizedExperiment::colData
     mcols <- SummarizedExperiment::mcols
@@ -43,12 +51,12 @@ makeTSEFromSE <- function(se, tree) {
     tree$node.label <-
         as.character(paste("Node", length(tree$tip) + 1:tree$Nnode, sep = ""))
     tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(
-        assays = assays(se),
-        colData = colData(se),
-        metadata = metadata(se),
+        assays = assays(seAgg),
+        colData = colData(seAgg),
+        metadata = metadata(seAgg),
         rowTree = tree
     )
-    mcols(tse) <- mcols(se)
+    mcols(tse) <- mcols(seAgg)
     tse
 }
 
@@ -82,9 +90,7 @@ makeTSE <- function(treeTermFile,
     treeMerged <- mergeTreeWithSE(treeMerged, txpsFilt)
     se <- se[treeMerged$tip.label, ]
 
-    seAgg <- aggAssays(treeMerged, se)
-    # seAgg <- fishpond::computeInfRV(seAgg, meanVariance = FALSE)
-    tse <- makeTSEFromSE(seAgg, treeMerged)
+    tse <- makeTSEFromSE(treeMerged, se)
     tse <- fishpond::computeInfRV(tse, meanVariance = FALSE)
     tse
 }

@@ -6,7 +6,6 @@ Authors@R: c(
     person("Michael", "Love", role = c("aut", "cre")),
     person("Rob", "Patro", role = c("aut", "cre"))
     )
-           
 Description: Given the trees obtained from TreeTerminus for an RNASeq experiment
     along with Salmon quantified counts, it creates a TreeSummarizedExperiment
     (TSE) object. Also provided is the method to obtain a cut from a tree that 

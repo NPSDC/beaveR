@@ -29,7 +29,7 @@ test_that("testSolveObj", {
     tse <- makeTSE(clustFile, coldata)
     lfc <- getScaledLFC(tse, "condition")
     expect_length(lfc, nrow(tse))
-    metVec <- sizeDesc*lfc/SummarizedExperiment::mcols(tse)[["meanInfRV"]]
+    metVec <- sizeDesc*abs(lfc)/SummarizedExperiment::mcols(tse)[["meanInfRV"]]
     opt <- solveForOptimalCut(tse, metVec, "max")
     expect_length(opt, 2)
     expect_equal(names(opt), c("cut", "optVal"))

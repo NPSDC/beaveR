@@ -22,9 +22,12 @@ test_that("check inputs", {
 
     clustFile <- file.path(dir, "group_nwk.txt")
     tse <- makeTSE(clustFile, coldata)
+    tree <- TreeSummarizedExperiment::rowTree(tse)
+    totalNodes <- length(tree$tip.label) + tree$Nnode
     expect_s4_class(tse, "TreeSummarizedExperiment")
     mirv <- SummarizedExperiment::mcols(tse)[["meanInfRV"]]
     expect_equal(length(mirv), nrow(tse))
+    expect_equal(totalNodes, nrow(tse))
 })
 
 # test_that("wrong Term file", {
