@@ -1,0 +1,22 @@
+{
+    "read_files": "[ /fs/cbcb-lab/rob/students/noor/Uncertainity/brain_sim_nodtu/mode=gc_bias/reads_fastq/4/sample_02_1.fasta, /fs/cbcb-lab/rob/students/noor/Uncertainity/brain_sim_nodtu/mode=gc_bias/reads_fastq/4/sample_02_2.fasta]",
+    "expected_format": "IU",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 32250372,
+    "num_assigned_fragments": 32250372,
+    "num_frags_with_concordant_consistent_mappings": 32677510,
+    "num_frags_with_inconsistent_or_orphan_mappings": 24876,
+    "strand_mapping_bias": 0.5001906510012544,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 16344985,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 16332525,
+    "SF": 12577,
+    "SR": 12299,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}
