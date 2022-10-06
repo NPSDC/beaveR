@@ -2,8 +2,9 @@ test_that("check inputs", {
     expect_error(buildTSE())
     expect_error(buildTSE("invalid", "quant file"))
 
-    dir <- "../../extdata/brain_sim_nodtu_small_example"
-    clustFile <- file.path(dir, "group_nwk.txt")
+    dir <- system.file("extdata", package="beaveR")
+    dir <- file.path(dir, "brain_sim_nodtu_small_example")
+    clustFile <- file.path(dir, "cluster_nwk.txt")
     expect_error(buildTSE(clustFile, "ff"))
 
     quantDir <- file.path(dir, "out_sal")
@@ -20,7 +21,7 @@ test_that("check inputs", {
     clustFile <- "test-buildTSE.R"
     expect_error(buildTSE(clustFile, coldata))
 
-    clustFile <- file.path(dir, "group_nwk.txt")
+    clustFile <- file.path(dir, "cluster_nwk.txt")
     tse <- buildTSE(clustFile, coldata)
     tree <- TreeSummarizedExperiment::rowTree(tse)
     totalNodes <- length(tree$tip.label) + tree$Nnode

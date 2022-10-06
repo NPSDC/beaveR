@@ -3,7 +3,7 @@ test_that("findSummStat works", {
     dir <- file.path(dir, "brain_sim_nodtu_small_example")
     quantDir <- file.path(dir, "out_sal")
     quantFiles <- file.path(quantDir, samples, "quant.sf")
-    clustFile <- file.path(dir, "group_nwk.txt")
+    clustFile <- file.path(dir, "cluster_nwk.txt")
     coldata <- data.frame(files = quantFiles, names = samples)
     tse <- buildTSE(clustFile, coldata)
     expect_error(findNodeInformation(coldata, coldata))

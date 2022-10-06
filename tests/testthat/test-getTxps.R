@@ -1,7 +1,8 @@
 test_that("transcript NULL", {
 
-    dir <- "../../extdata/brain_sim_nodtu_small_example"
-    clustFile <- file.path(dir, "group_nwk.txt")
+    dir <- system.file("extdata", package="beaveR")
+    dir <- file.path(dir, "brain_sim_nodtu_small_example")
+    clustFile <- file.path(dir, "cluster_nwk.txt")
     quantDir <- file.path(dir, "out_sal")
     samples <- as.vector(outer(seq(6), c(1,2), function(x,y) paste(x,y,sep="_")))
     quantFiles <- file.path(quantDir, samples, "quant.sf")

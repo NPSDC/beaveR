@@ -1,6 +1,7 @@
 test_that("mergeTree working", {
-    dir <- "../../extdata/brain_sim_nodtu_small_example"
-    clustFile <- file.path(dir, "group_nwk.txt")
+    dir <- system.file("extdata", package="beaveR")
+    dir <- file.path(dir, "brain_sim_nodtu_small_example")
+    clustFile <- file.path(dir, "cluster_nwk.txt")
     trees <- ape::read.tree(clustFile)
 
     tree <- mergeTrees(trees)
