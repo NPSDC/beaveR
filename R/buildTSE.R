@@ -9,10 +9,8 @@ getTxps <- function(txps, y, ...) {
         if (sum(SummarizedExperiment::mcols(y)[["keep"]]) == 0) {
             stop("No txps match the filtering criteria, change either minN or minCount")
         }
-        txps <-
-            rownames(y)[SummarizedExperiment::mcols(y)[["keep"]]]
-    }
-    else {
+        txps <- rownames(y)[SummarizedExperiment::mcols(y)[["keep"]]]
+    } else {
         if (!all(txps %in% rownames(y)))
             stop("txps provided missing in the data")
     }
@@ -21,21 +19,20 @@ getTxps <- function(txps, y, ...) {
 
 #' @importFrom methods is
 buildTSEFromSE <- function(tree, se) {
-    if (!(is(se, "SummarizedExperiment") |
-          is(se, "SingleCellExperiment"))) {
+    if (!(is(se, "SummarizedExperiment") | is(se, "SingleCellExperiment"))) {
         stop("se can only come from SummarizedExperiment/SingleCellExperiment")
     }
     if (!is(tree, "phylo")) {
         stop("tree should be from phylo class")
     }
     l <- length(tree$tip.label)
-    if(l != nrow(se)) {
+    if (l != nrow(se)) {
         stop("number of leaves should be equal to number of rows in se")
     }
-    if(!all(tree$tip.label %in% rownames(se))) {
+    if (!all(tree$tip.label %in% rownames(se))) {
         stop("leaf set of tree is not same as the transcripts in se")
     }
-    se <- se[tree$tip.label,]
+    se <- se[tree$tip.label, ]
     seAgg <- aggAssays(tree, se)
     assays <- SummarizedExperiment::assays
     colData <- SummarizedExperiment::colData
@@ -44,14 +41,9 @@ buildTSEFromSE <- function(tree, se) {
         assays <- SingleCellExperiment::assays
         colData <- SingleCellExperiment::colData
     }
-    tree$node.label <-
-        as.character(paste("Node", length(tree$tip) + 1:tree$Nnode, sep = ""))
-    tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(
-        assays = assays(seAgg),
-        colData = colData(seAgg),
-        metadata = metadata(seAgg),
-        rowTree = tree
-    )
+    tree$node.label <- as.character(paste("Node", length(tree$tip) + 1:tree$Nnode, sep = ""))
+    tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(assays = assays(seAgg), colData = colData(seAgg),
+        metadata = metadata(seAgg), rowTree = tree)
     mcols(tse) <- mcols(seAgg)
     tse
 }
@@ -78,13 +70,13 @@ buildTSEFromSE <- function(tree, se) {
 #'
 #' @examples
 #' # path to example data
-#' dir <- system.file("extdata/brain_sim_nodtu_small_example", package="beaveR")
+#' dir <- system.file('extdata/brain_sim_nodtu_small_example', package='beaveR')
 #' # path to file output by TreeTerminus
-#' clustFile <- file.path(dir, "cluster_nwk.txt")
+#' clustFile <- file.path(dir, 'cluster_nwk.txt')
 #' # path to Salmon quantified files
-#' quantDir <- file.path(dir, "out_sal")
-#' samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep="_")))
-#' quantFiles <- file.path(quantDir, samples, "quant.sf")
+#' quantDir <- file.path(dir, 'out_sal')
+#' samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep='_')))
+#' quantFiles <- file.path(quantDir, samples, 'quant.sf')
 #' coldata <- data.frame(files=quantFiles, names=samples, condition=factor(rep(1:2, each=6)))
 #' tse <- buildTSE(treeTermFile = clustFile, coldata = coldata)
 
@@ -92,22 +84,14 @@ buildTSEFromSE <- function(tree, se) {
 #' @export
 #' @importFrom methods is
 #' @importFrom SummarizedExperiment mcols<-
-buildTSE <- function(treeTermFile,
-                   coldata,
-                   txps = NULL,
-                   ...) {
+buildTSE <- function(treeTermFile, coldata, txps = NULL, ...) {
     if (!file.exists(treeTermFile)) {
         stop(paste("the file", treeTermFile, "does not exist"))
     }
     message("reading tree")
-    treeTerm <- ape::read.tree(treeTermFile) ## Reading tree
+    treeTerm <- ape::read.tree(treeTermFile)  ## Reading tree
     if (is.null(treeTerm)) {
-        stop(
-            paste(
-                treeTermFile,
-                "could not be parsed, make sure the file follows the correct format expected by ape::read.tree"
-            )
-        )
+        stop(paste(treeTermFile, "could not be parsed, make sure the file follows the correct format expected by ape::read.tree"))
     }
     se <- tximeta::tximeta(coldata)
     txpsFilt <- getTxps(txps, se, ...)

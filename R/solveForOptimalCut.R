@@ -4,7 +4,7 @@
 #' @param tse TreeSumarizedExperiment obtained as the output of running
 #' \code{buildTSE}
 #' @param metVec numeric vector representing a metric for all nodes in the tree
-#' @param type either "min" or "max", to minimize or maximize the sum of
+#' @param type either 'min' or 'max', to minimize or maximize the sum of
 #' the metric in the objective function
 #'
 #' @return List containing the nodes in the cut and the corresponding optimal
@@ -15,10 +15,10 @@
 #' gamma <- 0.1
 #' tree <- TreeSummarizedExperiment::rowTree(tse)
 #' descSize <- sapply(phangorn::Descendants(tree, seq(nrow(tse))), length)
-#' metric <- (mcols(tse)[["meanInfRV"]] + ape::node.depth(tree, 2)*gamma) *descSize
-#' objS <- solveForOptimalCut(tse, metVec = metric, type = "min")
-#' print(objS[["optVal"]])
-#' print(length(objS[["cut"]]))
+#' metric <- (mcols(tse)[['meanInfRV']] + ape::node.depth(tree, 2)*gamma) *descSize
+#' objS <- solveForOptimalCut(tse, metVec = metric, type = 'min')
+#' print(objS[['optVal']])
+#' print(length(objS[['cut']]))
 
 #'
 #' @importFrom methods is
@@ -45,13 +45,9 @@ solveForOptimalCut <- function(tse, metVec, type = "min") {
         }
         children <- phangorn::Descendants(tree, node, "child")
         if (type == "min")
-            val <-
-            min(metVec[node], sum(sapply(children, function(child)
-                findOptSum(tree, metVec, child, type = type))))
-        else
-            val <-
-            max(metVec[node], sum(sapply(children, function(child)
-                findOptSum(tree, metVec, child, type = type))))
+            val <- min(metVec[node], sum(sapply(children, function(child) findOptSum(tree,
+                metVec, child, type = type)))) else val <- max(metVec[node], sum(sapply(children, function(child) findOptSum(tree,
+            metVec, child, type = type))))
         pkg.globals[["globVec"]][node] <<- val
         return(val)
     }
@@ -61,8 +57,7 @@ solveForOptimalCut <- function(tse, metVec, type = "min") {
             return(node)
         }
         children <- phangorn::Descendants(tree, node, "child")
-        return(unlist(sapply(children, function(child)
-            findCut(tree, optVals, metVec, child))))
+        return(unlist(sapply(children, function(child) findCut(tree, optVals, metVec, child))))
     }
 
     pkg.globals <- new.env(parent = emptyenv())
@@ -74,5 +69,5 @@ solveForOptimalCut <- function(tse, metVec, type = "min") {
     optVals <- pkg.globals[["globVec"]]
 
     cut <- findCut(tree, optVals, metVec, length(tree$tip) + 1)
-    return(list("cut" = cut, "optVal" = optVal))
+    return(list(cut = cut, optVal = optVal))
 }

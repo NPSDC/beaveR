@@ -1,6 +1,6 @@
 Package: beaveR
 Title: Processing the output from TreeTerminus
-Version: 0.0.0.9000
+Version: 0.99.0
 Authors@R: c(
     person("Noor Pratap", "Singh", email="noorpratap@gmail.com", role = c("aut", "cre")),
     person("Michael", "Love", role = c("aut", "ctb")),
@@ -11,7 +11,6 @@ Description: Given the trees obtained from TreeTerminus for an RNASeq experiment
     (TSE) object. Also provided is the method to obtain a cut from a tree that 
     optimizes the sum of a given node metric for the nodes in the cut. Methods
     are also provided to obtain summary statistics for a given node in the tree.
-Maintainer: Noor Pratap Singh <noorpratap@gmail.com>
 License: GPL-2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

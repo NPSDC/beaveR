@@ -6,8 +6,9 @@ getLog2FC <- function(infRepsArray, condition, pc = 5) {
     cond2 <- condition == levels(condition)[2]
     diffs <- matrix(nrow = dims[1], ncol = dims[3])
     for (k in seq_len(dims[3])) {
-        diffs[, k] <- log2(rowMeans(infRepsArray[, cond2, k]) + pc) -
-            log2(rowMeans(infRepsArray[, cond1, k]) + pc)
+        diffs[, k] <-
+            log2(rowMeans(infRepsArray[, cond2, k]) + pc) - log2(rowMeans(infRepsArray[,
+                                                                                       cond1, k]) + pc)
     }
 
     # median over inferential replicates
@@ -32,7 +33,7 @@ getLog2FC <- function(infRepsArray, condition, pc = 5) {
 #' @export
 #' @examples
 #' example(buildTSE)
-#' lfc <- getScaledLFC(tse, "condition")
+#' lfc <- getScaledLFC(tse, 'condition')
 #' @importFrom SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment rowTree
 #' @importFrom methods is

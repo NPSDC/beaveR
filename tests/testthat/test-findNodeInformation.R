@@ -1,7 +1,7 @@
 test_that("findNodeInformation works", {
-    dir <- system.file("extdata", package="beaveR")
+    dir <- system.file("extdata", package = "beaveR")
     dir <- file.path(dir, "brain_sim_nodtu_small_example")
-    samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep="_")))
+    samples <- as.vector(outer(c(1:6), c(1, 2), function(x, y) paste(x, y, sep = "_")))
     quantDir <- file.path(dir, "out_sal")
     quantFiles <- file.path(quantDir, samples, "quant.sf")
     clustFile <- file.path(dir, "cluster_nwk.txt")

@@ -3,8 +3,7 @@
 aggAssay <- function(tree, nodeIDs, seMat, groupInds = NULL) {
     if (!is(tree, "phylo"))
         stop("tree does not belong to class phylo")
-    if (!is.numeric(nodeIDs))
-    {
+    if (!is.numeric(nodeIDs)) {
         nodeIDs <- suppressWarnings(as.numeric(nodeIDs))
         if (any(is.na(nodeIDs)))
             stop("Node ids contain a non numeric")
@@ -23,10 +22,8 @@ aggAssay <- function(tree, nodeIDs, seMat, groupInds = NULL) {
     }
 
     if (length(innNodesInds) > 0) {
-        lInds <-
-            phangorn::Descendants(tree, nodeIDs[innNodesInds], type = "tips")
-        names(lInds) <-
-            paste("Node", as.character(nodeIDs[innNodesInds]), sep = "")
+        lInds <- phangorn::Descendants(tree, nodeIDs[innNodesInds], type = "tips")
+        names(lInds) <- paste("Node", as.character(nodeIDs[innNodesInds]), sep = "")
         mat <- rbind(mat, performRowSumAgg(seMat, lInds))
     }
     mat <- performColMeanAgg(mat, groupInds)
@@ -48,8 +45,7 @@ performColMeanAgg <- function(seM, colInds = NULL) {
     for (i in seq_along(colInds)) {
         if (length(colInds[[i]]) != 1) {
             mat[, i] <- FUN(seM[, colInds[[i]]])
-        }
-        else {
+        } else {
             mat[, i] <- seM[, colInds[[i]]]
         }
     }
@@ -57,8 +53,7 @@ performColMeanAgg <- function(seM, colInds = NULL) {
     mat
 }
 
-performRowSumAgg <- function(seM, rowInds = NULL)
-{
+performRowSumAgg <- function(seM, rowInds = NULL) {
     performMatCheck(seM)
     if (is.null(rowInds)) {
         return(seM)
@@ -72,8 +67,7 @@ performRowSumAgg <- function(seM, rowInds = NULL)
     for (i in seq_along(rowInds)) {
         if (length(rowInds[[i]]) != 1) {
             mat[i, ] <- FUN(seM[rowInds[[i]], ])
-        }
-        else {
+        } else {
             mat[i, ] <- seM[rowInds[[i]], ]
         }
     }
@@ -102,8 +96,7 @@ performIndCheck <- function(seM, inds, type = "row") {
         if (any(unlist(inds) > nrow(seM))) {
             stop("Atleast 1 index in rowInds is greater than the total number of rows")
         }
-    }
-    else {
+    } else {
         if (any(unlist(inds) > ncol(seM))) {
             stop("Atleast 1 index in colInds is greater than the total number of columns")
         }
@@ -129,10 +122,7 @@ createMat <- function(seM, inds, type = "row") {
 
     mat <- matrix(0, nrow = nrows, ncol = ncols)
     if (is(seM, "dgCMatrix")) {
-        mat <- Matrix::Matrix(0,
-                              nrow = nrows,
-                              ncol = ncols,
-                              sparse = T)
+        mat <- Matrix::Matrix(0, nrow = nrows, ncol = ncols, sparse = T)
     }
     mat
 }
