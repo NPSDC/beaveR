@@ -7,6 +7,8 @@ findGenes <- function(tree, node, txpsAnn) {
 
 #' @export
 #' @importFrom phangorn Descendants
+#' @importFrom methods is
+#' @importFrom S4Vectors metadata
 findNodeInformation <- function(tse, node, type = NULL) {
     if (!is(tse, "TreeSummarizedExperiment")) {
         stop("tse is not Tree Summarized Object")

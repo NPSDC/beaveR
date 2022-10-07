@@ -1,3 +1,5 @@
+#' @importFrom methods is
+
 aggAssay <- function(tree, nodeIDs, seMat, groupInds = NULL) {
     if (!is(tree, "phylo"))
         stop("tree does not belong to class phylo")
@@ -31,6 +33,7 @@ aggAssay <- function(tree, nodeIDs, seMat, groupInds = NULL) {
     mat
 }
 
+#' @importFrom methods is
 performColMeanAgg <- function(seM, colInds = NULL) {
     performMatCheck(seM)
     if (is.null(colInds)) {
@@ -78,6 +81,7 @@ performRowSumAgg <- function(seM, rowInds = NULL)
     mat
 }
 
+#' @importFrom methods is
 performMatCheck <- function(seM) {
     if (!(is(seM, "matrix") | is(seM, "dgCMatrix"))) {
         stop("input matrix should be of class dgCMatrix or matrix")
@@ -89,6 +93,7 @@ performMatCheck <- function(seM) {
     }
 }
 
+#' @importFrom methods is
 performIndCheck <- function(seM, inds, type = "row") {
     if (!is(inds, "list")) {
         stop("colInds has to be list")
@@ -117,6 +122,7 @@ getDimNames <- function(seM, inds, type = "row") {
     dnames
 }
 
+#' @importFrom methods is
 createMat <- function(seM, inds, type = "row") {
     nrows <- ifelse(type == "row", length(inds), nrow(seM))
     ncols <- ifelse(type == "col", length(inds), ncol(seM))

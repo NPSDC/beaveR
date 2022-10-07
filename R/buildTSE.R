@@ -24,6 +24,7 @@ getTxps <- function(txps, y, ...) {
     return(txps)
 }
 
+#' @importFrom methods is
 buildTSEFromSE <- function(tree, se) {
     if (!(is(se, "SummarizedExperiment") |
           is(se, "SingleCellExperiment"))) {
@@ -67,6 +68,8 @@ buildTSEFromSE <- function(tree, se) {
 #' @param ...
 #'
 #' @export
+#' @importFrom methods is
+#' @importFrom SummarizedExperiment mcols<-
 buildTSE <- function(treeTermFile,
                    coldata,
                    txps = NULL,

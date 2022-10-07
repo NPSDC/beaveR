@@ -1,4 +1,6 @@
 #' @export
+#' @importFrom methods is
+#' @importFrom S4Vectors metadata metadata<-
 aggAssays <- function(tree, se, groupInds = NULL)
 {
     if(!is(tree, "phylo")) {

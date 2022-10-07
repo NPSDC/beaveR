@@ -1,4 +1,5 @@
 #' https://github.com/mikelove/fishpond/blob/c1e968f810f2caba2b333a3891d2c3c05e73001b/R/swish.R#L338
+#' @importFrom matrixStats rowMedians
 getLog2FC <- function(infRepsArray, condition, pc=5) {
     dims <- dim(infRepsArray)
     cond1 <- condition == levels(condition)[1]
@@ -17,6 +18,7 @@ getLog2FC <- function(infRepsArray, condition, pc=5) {
 #' @export
 #' @importFrom SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment rowTree
+#' @importFrom methods is
 getScaledLFC <- function(tse, x, pc=5) {
     if(!(x %in% colnames(colData(tse)))) {
         stop("x is not a valid column")

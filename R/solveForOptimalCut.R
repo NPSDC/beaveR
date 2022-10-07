@@ -1,4 +1,5 @@
 #' @export
+#' @importFrom methods is
 solveForOptimalCut <- function(tse, metVec, type = "min") {
     if (!is(tse, "TreeSummarizedExperiment")) {
         stop("TSE should be of class experiment")

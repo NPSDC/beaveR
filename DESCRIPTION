@@ -28,4 +28,7 @@ Imports:
     SingleCellExperiment,
     TreeSummarizedExperiment,
     tximeta,
-    abind
+    abind,
+    methods,
+    S4Vectors,
+    matrixStats

@@ -1,12 +1,13 @@
 test_that("mergeTreeWithSE working", {
     dir <- system.file("extdata", package="beaveR")
-    dir <- file.path(dir, "brain_sim_nodtu_small_example")
-    clustFile <- file.path(dir, "cluster_nwk.txt")
+    samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep="_")))
+    clustFile <- file.path(dir,  "brain_sim_nodtu_small_example", "cluster_nwk.txt")
+    quantFiles <- file.path(dir, "brain_sim_nodtu_small_example", "out_sal" , samples, "quant.sf")
     trees <- ape::read.tree(clustFile)
 
-    quantDir <- file.path(dir, "out_sal")
-    samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep="_")))
-    quantFiles <- file.path(quantDir, samples, "quant.sf")
+    # quantDir <- file.path(dir, )
+
+
     coldata <- data.frame(files=quantFiles, names=samples)
     se <- tximeta::tximeta(coldata)
 
