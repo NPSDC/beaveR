@@ -1,4 +1,3 @@
-#' @export
 #' @importFrom methods is
 #' @importFrom S4Vectors metadata metadata<-
 aggAssays <- function(tree, se, groupInds = NULL)
@@ -46,6 +45,7 @@ aggAssays <- function(tree, se, groupInds = NULL)
     }
     metadata <- metadata(se)
     metadata[["txpsAnn"]] <- rowData(se)
+    metadata[["txpsLength"]] <- assays(se)[["length"]]
     metadata(y) <- metadata
     y
 }

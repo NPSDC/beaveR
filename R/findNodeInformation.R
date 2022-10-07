@@ -5,11 +5,33 @@ findGenes <- function(tree, node, txpsAnn) {
     genes
 }
 
+#' Reports the mean inferential variance for that node and if the transcript
+#' to gene mapping exists provide the genes mapped to the node. Also reports
+#' this information for the descendant nodes if requested by the user.
+#'
+#' @param tse TreeSumarizedExperiment obtained as the output of running
+#' \code{buildTSE}
+#' @param node numeric index of the node whose information is required
+#' @param type either NULL or should be same as \code{type}
+#' @param txpsAnn Optional, data.frame txp to gene mapping, with rownames set to
+#' transcripts and gene column set to "gene_id"
+#' in \code{phangorn::Descendants}
+#'
+#' @return data.frame
+#'
+#' @examples
+#' example(buildTSE)
+#' node <- 300
+#' nodeInf <- findNodeInformation(tse, node=node, type="children")
+#' print(nodeInf)
+#' nodeInf <- findNodeInformation(tse, node=node, type=NULL)
+#' print(nodeInf)
+
 #' @export
 #' @importFrom phangorn Descendants
 #' @importFrom methods is
 #' @importFrom S4Vectors metadata
-findNodeInformation <- function(tse, node, type = NULL) {
+findNodeInformation <- function(tse, node, type = NULL, txpsAnn = NULL) {
     if (!is(tse, "TreeSummarizedExperiment")) {
         stop("tse is not Tree Summarized Object")
     }
@@ -23,8 +45,15 @@ findNodeInformation <- function(tse, node, type = NULL) {
     tree <- TreeSummarizedExperiment::rowTree(tse)
     df <-
         data.frame(nodeInd = node, meanInfRV = SummarizedExperiment::mcols(tse)[["meanInfRV"]][node])
-    txpsAnn <- metadata(tse)[["txpsAnn"]]
 
+    if(!is.null(txpsAnn)) {
+        if(!is(txpsAnn, "data.frame")) {
+            stop("txpsAnn has to be a data.frame")
+        }
+    }
+    else {
+        txpsAnn <- metadata(tse)[["txpsAnn"]]
+    }
 
     if ("gene_id" %in% colnames(txpsAnn)) {
         genes <- list(findGenes(tree, node, txpsAnn))

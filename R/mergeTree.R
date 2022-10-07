@@ -1,12 +1,3 @@
-#' Title
-#'
-#' @param trees
-#' @param updateInd
-#' @param tnames
-#'
-#' @return
-#' @export
-#' @examples
 mergeTrees <-function(trees,
                      updateInd = T,
                      tnames = NULL) {

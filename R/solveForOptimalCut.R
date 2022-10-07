@@ -1,4 +1,26 @@
+#' Finds a cut and its optimal value on solving the objective function that
+#' minimizes(maximizes) the sum for that metric over all nodes in the cut
+#'
+#' @param tse TreeSumarizedExperiment obtained as the output of running
+#' \code{buildTSE}
+#' @param metVec numeric vector representing a metric for all nodes in the tree
+#' @param type either "min" or "max", to minimize or maximize the sum of
+#' the metric in the objective function
+#'
+#' @return List containing the nodes in the cut and the corresponding optimal
+#' value
 #' @export
+#' @examples
+#' example(buildTSE)
+#' gamma <- 0.1
+#' tree <- TreeSummarizedExperiment::rowTree(tse)
+#' descSize <- sapply(phangorn::Descendants(tree, seq(nrow(tse))), length)
+#' metric <- (mcols(tse)[["meanInfRV"]] + ape::node.depth(tree, 2)*gamma) *descSize
+#' objS <- solveForOptimalCut(tse, metVec = metric, type = "min")
+#' print(objS[["optVal"]])
+#' print(length(objS[["cut"]]))
+
+#'
 #' @importFrom methods is
 solveForOptimalCut <- function(tse, metVec, type = "min") {
     if (!is(tse, "TreeSummarizedExperiment")) {
