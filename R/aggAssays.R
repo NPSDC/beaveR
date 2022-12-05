@@ -35,6 +35,16 @@ aggAssays <- function(tree, se, groupInds = NULL) {
             aggAssay(tree, c(1:nrow(se), innNodes), assays(se)[[n]], groupInds = groupInds)
     })
     names(assaysList) <- reqAssayNames
+
+    lAssay <- matrix(NA, nrow = dim(assaysList[[1]])[1],
+                     ncol = dim(assaysList[[1]])[2])
+    lAssay[1:nrow(se),1:ncol(se)] = assays(se)[["length"]]
+    l <- length(assaysList)
+    assaysList[[l+1]] <- lAssay
+
+    names(assaysList)[l+1] <- "length"
+    assaysList <- assaysList[c(1,2,l+1,3:l)]
+
     message("Aggregation Ended")
     if (is(se, "SummarizedExperiment")) {
         y <-

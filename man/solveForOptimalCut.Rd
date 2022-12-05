@@ -13,7 +13,7 @@ solveForOptimalCut(tse, metVec, type = "min")
 
 \item{metVec}{numeric vector representing a metric for all nodes in the tree}
 
-\item{type}{either "min" or "max", to minimize or maximize the sum of
+\item{type}{either 'min' or 'max', to minimize or maximize the sum of
 the metric in the objective function}
 }
 \value{
@@ -29,9 +29,9 @@ example(buildTSE)
 gamma <- 0.1
 tree <- TreeSummarizedExperiment::rowTree(tse)
 descSize <- sapply(phangorn::Descendants(tree, seq(nrow(tse))), length)
-metric <- (mcols(tse)[["meanInfRV"]] + ape::node.depth(tree, 2)*gamma) *descSize
-objS <- solveForOptimalCut(tse, metVec = metric, type = "min")
-print(objS[["optVal"]])
-print(length(objS[["cut"]]))
+metric <- (mcols(tse)[['meanInfRV']] + ape::node.depth(tree, 2)*gamma) *descSize
+objS <- solveForOptimalCut(tse, metVec = metric, type = 'min')
+print(objS[['optVal']])
+print(length(objS[['cut']]))
 
 }
