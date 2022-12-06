@@ -41,7 +41,7 @@ tree <- TreeSummarizedExperiment::rowTree(tse)
 lfc <- getScaledLFC(tse, "condition")
 descSize <- sapply(phangorn::Descendants(tree, seq(nrow(tse))), length)
 metric <- lfc/mcols(tse)[['meanInfRV']]
-objS <- solveForOptimalCut(tse, metVec = metric, type = 'min')
+objS <- solveForOptimalCut(tse, metVec = metric, type = 'max')
 print(objS[['optVal']])
 print(length(objS[['cut']]))
 ```
