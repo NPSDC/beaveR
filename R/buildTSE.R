@@ -37,10 +37,10 @@ buildTSEFromSE <- function(tree, se) {
     assays <- SummarizedExperiment::assays
     colData <- SummarizedExperiment::colData
     mcols <- SummarizedExperiment::mcols
-    if (is(se, "SingleCellExperiment")) {
-        assays <- SingleCellExperiment::assays
-        colData <- SingleCellExperiment::colData
-    }
+    # if (is(se, "SingleCellExperiment")) {
+    #     assays <- SingleCellExperiment::assays
+    #     colData <- SingleCellExperiment::colData
+    # }
     tree$node.label <- as.character(paste("Node", length(tree$tip) + 1:tree$Nnode, sep = ""))
     tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(assays = assays(seAgg), colData = colData(seAgg),
         metadata = metadata(seAgg), rowTree = tree)

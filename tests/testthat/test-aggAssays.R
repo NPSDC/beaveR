@@ -25,5 +25,8 @@ test_that("aggAssays", {
         ]))
     expect_equal(SummarizedExperiment::assays(seAgg)[["counts"]][l + 2, ], colSums(SummarizedExperiment::assays(seAgg)[["counts"]][phangorn::Descendants(tree,
         l + 2)[[1]], ]))
+    expect_equal(SummarizedExperiment::assays(seAgg)[["counts"]][l + 2, ], colSums(SummarizedExperiment::assays(seAgg)[["counts"]][phangorn::Descendants(tree,
+                                                                                                                                                         l + 2)[[1]], ]))
     expect_equal(nrow(seAgg), length(tree$tip) + tree$Nnode)
+    expect_equal(SummarizedExperiment::assays(seAgg)[["length"]][l - 1, ], SummarizedExperiment::assays(seAgg)[["length"]][l - 1,])
 })

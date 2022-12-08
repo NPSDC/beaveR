@@ -1,3 +1,22 @@
+## https://github.com/mikelove/tximport/blob/092f0a3bf2a1cd2430b7e1c2fa437426e746ea4e/R/helper.R
+replaceMissingLength <- function(lengthMat, aveLengthSampGroup) {
+    nanRows <- which(apply(lengthMat, 1, function(row) any(is.nan(row))))
+    if (length(nanRows) > 0) {
+        for (i in nanRows) {
+            if (all(is.nan(lengthMat[i,]))) {
+                # if all samples have 0 abundances for all tx, use the simple average
+                lengthMat[i,] <- aveLengthSampGroup[i]
+            } else {
+                # otherwise use the geometric mean of the lengths from the other samples
+                idx <- is.nan(lengthMat[i,])
+                lengthMat[i,idx] <-  exp(mean(log(lengthMat[i,!idx]), na.rm=TRUE))
+            }
+        }
+    }
+    lengthMat
+}
+
+
 #' @importFrom methods is
 #' @importFrom S4Vectors metadata metadata<-
 aggAssays <- function(tree, se, groupInds = NULL) {
@@ -15,12 +34,12 @@ aggAssays <- function(tree, se, groupInds = NULL) {
     assayNames <- SummarizedExperiment::assayNames
     rowData <- SummarizedExperiment::rowData
     colData <- SummarizedExperiment::colData
-    if (is(se, "SingleCellExperiment")) {
-        assays <- SingleCellExperiment::assays
-        assayNames <- SingleCellExperiment::assayNames
-        rowData <- SingleCellExperiment::rowData
-        colData <- SingleCellExperiment::colData
-    }
+    # if (is(se, "SingleCellExperiment")) {
+    #     assays <- SingleCellExperiment::assays
+    #     assayNames <- SingleCellExperiment::assayNames
+    #     rowData <- SingleCellExperiment::rowData
+    #     colData <- SingleCellExperiment::colData
+    # }
 
     innNodes <- nrow(se) + 1:tree$Nnode
     reqAssayNames <-
@@ -36,11 +55,30 @@ aggAssays <- function(tree, se, groupInds = NULL) {
     })
     names(assaysList) <- reqAssayNames
 
-    lAssay <- matrix(NA, nrow = dim(assaysList[[1]])[1],
-                     ncol = dim(assaysList[[1]])[2])
-    lAssay[1:nrow(se),1:ncol(se)] = assays(se)[["length"]]
+    # aggregated length
+    # Adapted from SummarizeToGene
+    # https://github.com/mikelove/tximport/blob/master/R/summarizeToGene.R
+
+    # the next lines calculate a weighted average of transcript length,
+    # weighting by transcript abundance.
+    # this can be used as an offset / normalization factor which removes length bias
+    # for the differential analysis of estimated counts summarized at the group level.
+    weightedLength <- aggAssay(tree, c(1:nrow(se), innNodes), assays(se)[["abundance"]] * assays(se)[["length"]], groupInds = groupInds)
+    lengthMat <- weightedLength / assaysList[["abundance"]]
+
+    # pre-calculate a simple average transcript length
+    # for the case the abundances are all zero for all samples.
+    # first, average the tx lengths over samples
+    aveLengthSamp <- rowMeans(assays(se)[["length"]])
+
+    # then simple average of lengths within groups (not weighted by abundance)
+    desc <- phangorn::Descendants(tree, c(1:nrow(se), innNodes))
+    aveLengthSampGroup <- sapply(desc, function(inds) mean(aveLengthSamp[inds]))
+
+    lengthMat <- replaceMissingLength(lengthMat, aveLengthSampGroup)
+
     l <- length(assaysList)
-    assaysList[[l+1]] <- lAssay
+    assaysList[[l+1]] <- lengthMat
 
     names(assaysList)[l+1] <- "length"
     assaysList <- assaysList[c(1,2,l+1,3:l)]
@@ -55,7 +93,7 @@ aggAssays <- function(tree, se, groupInds = NULL) {
     }
     metadata <- metadata(se)
     metadata[["txpsAnn"]] <- rowData(se)
-    metadata[["txpsLength"]] <- assays(se)[["length"]]
+    # metadata[["txpsLength"]] <- assays(se)[["length"]]
     metadata(y) <- metadata
     y
 }
