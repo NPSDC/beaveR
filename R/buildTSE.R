@@ -45,6 +45,7 @@ buildTSEFromSE <- function(tree, se) {
     tse <- TreeSummarizedExperiment::TreeSummarizedExperiment(assays = assays(seAgg), colData = colData(seAgg),
         metadata = metadata(seAgg), rowTree = tree)
     mcols(tse) <- mcols(seAgg)
+    metadata(tse)[["infRepsScaled"]] <- FALSE
     tse
 }
 

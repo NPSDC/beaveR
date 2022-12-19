@@ -30,4 +30,5 @@ Imports:
     abind,
     methods,
     S4Vectors,
-    matrixStats
+    matrixStats,
+    svMisc
