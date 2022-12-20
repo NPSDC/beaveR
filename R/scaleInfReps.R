@@ -185,8 +185,8 @@ computeSizeFactors <- function(tse, type = "txp", lengthCorrect = TRUE,
 scaleInfReps <- function(tse, szMat = NULL, lengthCorrect = TRUE,
                          saveMeanScaled = FALSE, quiet = FALSE,
                          force = FALSE, meanDepth = NULL) {
-  if (!(is(tse, "TreeSummarizedExperiment"))) {
-    stop("tse does not belong to the TreeSummarizedExperiment")
+  if (!(is(tse, "SummarizedExperiment"))) {
+    stop("tse does not belong to the SummarizedExperiment or the classes that inherit it")
   }
 
   if (metadata(tse)$infRepsScaled & !force) {
@@ -211,8 +211,10 @@ scaleInfReps <- function(tse, szMat = NULL, lengthCorrect = TRUE,
   nreps <- length(infReps)
   length <- assays(tse)[["length"]]
 
-  tree <- rowTree(tse)
-  l <- length(tree$tip)
+  if(is.null(metadata(tse)[["txpsAnn"]])) {
+      stop("txpsAnn missing in metadata")
+  }
+  l <- nrow(metadata(tse)[["txpsAnn"]])
 
   if (!all(dim(sizeMat) == c(nreps, ncol(tse)))) {
     stop("Incorrect dimensions of size factor")
