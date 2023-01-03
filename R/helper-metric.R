@@ -37,7 +37,7 @@ getLog2FC <- function(infRepsArray, condition, pc = 5) {
 #' @importFrom SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment rowTree
 #' @importFrom methods is
-getScaledLFC <- function(tse, x, pc = 5) {
+getTPMLFC <- function(tse, x, pc = 5) {
     if (!(x %in% colnames(colData(tse)))) {
         stop("x is not a valid column")
     }
@@ -64,6 +64,6 @@ getScaledLFC <- function(tse, x, pc = 5) {
         infReps[, , j] <- t(t(infReps[, , j]) / sf)
     }
     mSf <- mSf / dim(infReps)[3]
-    lfc <- getLog2FC(infReps, cond, pc = 5 / mSf)
+    lfc <- getLog2FC(infReps, cond, pc = pc / mSf)
     lfc
 }
