@@ -2,7 +2,7 @@
 
 export(buildTSE)
 export(findNodeInformation)
-export(getScaledLFC)
+export(getTPMLFC)
 export(solveForOptimalCut)
 importFrom(S4Vectors,"metadata<-")
 importFrom(S4Vectors,metadata)
