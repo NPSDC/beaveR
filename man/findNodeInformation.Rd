@@ -31,8 +31,8 @@ this information for the descendant nodes if requested by the user.
 \examples{
 example(buildTSE)
 node <- 300
-nodeInf <- findNodeInformation(tse, node=node, type='children')
+nodeInf <- findNodeInformation(tse, node = node, type = "children")
 print(nodeInf)
-nodeInf <- findNodeInformation(tse, node=node, type=NULL)
+nodeInf <- findNodeInformation(tse, node = node, type = NULL)
 print(nodeInf)
 }

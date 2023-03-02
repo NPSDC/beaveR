@@ -34,6 +34,7 @@ aggAssays <- function(tree, se, groupInds = NULL) {
   assayNames <- SummarizedExperiment::assayNames
   rowData <- SummarizedExperiment::rowData
   colData <- SummarizedExperiment::colData
+  l <- length(tree$tip)
   # if (is(se, "SingleCellExperiment")) {
   #     assays <- SingleCellExperiment::assays
   #     assayNames <- SingleCellExperiment::assayNames
@@ -65,8 +66,8 @@ aggAssays <- function(tree, se, groupInds = NULL) {
   # weighting by transcript abundance.
   # this can be used as an offset / normalization factor which removes length bias
   # for the differential analysis of estimated counts summarized at the group level.
-  weightedLength <- aggAssay(tree, c(1:nrow(se), innNodes), assays(se)[["abundance"]] * assays(se)[["length"]], groupInds = groupInds)
-  lengthMat <- weightedLength / assaysList[["abundance"]]
+  weightedLength <- aggAssay(tree, innNodes, assays(se)[["abundance"]] * assays(se)[["length"]], groupInds = groupInds)
+  lengthMat <- weightedLength / assaysList[["abundance"]][innNodes,]
 
   # pre-calculate a simple average transcript length
   # for the case the abundances are all zero for all samples.
@@ -74,10 +75,11 @@ aggAssays <- function(tree, se, groupInds = NULL) {
   aveLengthSamp <- rowMeans(assays(se)[["length"]])
 
   # then simple average of lengths within groups (not weighted by abundance)
-  desc <- phangorn::Descendants(tree, c(1:nrow(se), innNodes))
+  desc <- phangorn::Descendants(tree, innNodes)
   aveLengthSampGroup <- sapply(desc, function(inds) mean(aveLengthSamp[inds]))
 
-  lengthMat <- replaceMissingLength(lengthMat, aveLengthSampGroup)
+ lengthMat <- replaceMissingLength(lengthMat, aveLengthSampGroup)
+ lengthMat <- rbind(assays(se)[["length"]], lengthMat)
 
   l <- length(assaysList)
   assaysList[[l + 1]] <- lengthMat

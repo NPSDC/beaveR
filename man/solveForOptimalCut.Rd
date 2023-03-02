@@ -29,9 +29,9 @@ example(buildTSE)
 gamma <- 0.1
 tree <- TreeSummarizedExperiment::rowTree(tse)
 descSize <- sapply(phangorn::Descendants(tree, seq(nrow(tse))), length)
-metric <- (mcols(tse)[['meanInfRV']] + ape::node.depth(tree, 2)*gamma) *descSize
-objS <- solveForOptimalCut(tse, metVec = metric, type = 'min')
-print(objS[['optVal']])
-print(length(objS[['cut']]))
+metric <- (mcols(tse)[["meanInfRV"]] + ape::node.depth(tree, 2) * gamma) * descSize
+objS <- solveForOptimalCut(tse, metVec = metric, type = "min")
+print(objS[["optVal"]])
+print(length(objS[["cut"]]))
 
 }

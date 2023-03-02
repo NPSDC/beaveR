@@ -15,7 +15,25 @@ test_that("aggAssays", {
   tree <- mergeTreeWithSE(tree, txpsFilt)
   seAgg <- aggAssays(tree, se[tree$tip, ])
 
+  ## Checking for length
   l <- length(tree$tip)
+  expect_equal(assays(se)[["length"]], assays(seAgg)[["length"]][1:l,])
+  ## Tree nodes that completely contain genes -
+  ## checking that our length procedure is exact as tximeta
+  gs <- tximeta::summarizeToGene(se)
+  gInds <- lapply(SummarizedExperiment::rowData(gs)[["tx_ids"]], function(g) match(unlist(g), tree$tip.label)) ## index of transcripts belonging to genes in the tree
+  gInds <- gInds[sapply(gInds, function(x) sum(is.na(x)) == 0)] ## Only those genes whose entire transcript matches the tree transcripts
+  # ENSG00000221843.4 - 374
+  # ENSG00000240524.2 - 6
+  # ENSG00000188566.13 - 375
+  # ENSG00000156395.12 - 227
+  # ENSG00000143344.15 - 290
+  expect_equal(assays(seAgg)[["length"]][290,], assays(gs)[["length"]]["ENSG00000143344.15",])
+  expect_equal(assays(seAgg)[["length"]][227,], assays(gs)[["length"]]["ENSG00000156395.12",])
+  expect_equal(assays(seAgg)[["length"]][375,], assays(gs)[["length"]]["ENSG00000188566.13",])
+  expect_equal(assays(seAgg)[["length"]][6,], assays(gs)[["length"]]["ENSG00000240524.2",])
+  expect_equal(assays(seAgg)[["length"]][374,], assays(gs)[["length"]]["ENSG00000221843.4",])
+
   expect_s4_class(seAgg, "SummarizedExperiment")
   expect_equal(SummarizedExperiment::assays(seAgg)[["counts"]][l + 1, ], colSums(SummarizedExperiment::assays(seAgg)[["counts"]][1:l, ]))
   expect_equal(SummarizedExperiment::assays(seAgg)[["infRep10"]][l + 1, ], colSums(SummarizedExperiment::assays(seAgg)[["infRep10"]][1:l, ]))

@@ -44,13 +44,14 @@ should have been run with either bootstrap or gibbs sampling.
 }
 \examples{
 # path to example data
-dir <- system.file('extdata/brain_sim_nodtu_small_example', package='beaveR')
+dir <- system.file("extdata/brain_sim_nodtu_small_example", package = "beaveR")
 # path to file output by TreeTerminus
-clustFile <- file.path(dir, 'cluster_nwk.txt')
+clustFile <- file.path(dir, "cluster_nwk.txt")
 # path to Salmon quantified files
-quantDir <- file.path(dir, 'out_sal')
-samples <- as.vector(outer(c(1:6), c(1,2), function(x,y) paste(x,y,sep='_')))
-quantFiles <- file.path(quantDir, samples, 'quant.sf')
-coldata <- data.frame(files=quantFiles, names=samples, condition=factor(rep(1:2, each=6)))
+quantDir <- file.path(dir, "out_sal")
+samples <- as.vector(outer(c(1:6), c(1, 2), function(x, y) paste(x, y, sep = "_")))
+quantFiles <- file.path(quantDir, samples, "quant.sf")
+coldata <- data.frame(files = quantFiles, names = samples, condition = factor(rep(1:2, each = 6)))
 tse <- buildTSE(treeTermFile = clustFile, coldata = coldata)
+
 }
