@@ -39,7 +39,7 @@ getLog2FC <- function(infRepsArray, condition, pc = 5) {
 #' @importFrom SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment rowTree
 #' @importFrom methods is
-getTPMLFC <- function(tse, x, pc = 5) {
+getCPMLFC <- function(tse, x, pc = 5) {
     if (!(x %in% colnames(colData(tse)))) {
         stop("x is not a valid column")
     }

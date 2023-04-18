@@ -3,7 +3,7 @@
 export(buildTSE)
 export(computeSizeFactors)
 export(findNodeInformation)
-export(getTPMLFC)
+export(getCPMLFC)
 export(scaleInfReps)
 export(solveForOptimalCut)
 importFrom(S4Vectors,"metadata<-")
