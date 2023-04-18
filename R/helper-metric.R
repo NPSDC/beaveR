@@ -1,23 +1,25 @@
 # https://github.com/mikelove/fishpond/blob/c1e968f810f2caba2b333a3891d2c3c05e73001b/R/swish.R#L338
 #' @importFrom matrixStats rowMedians
 getLog2FC <- function(infRepsArray, condition, pc = 5) {
-    dims <- dim(infRepsArray)
-    cond1 <- condition == levels(condition)[1]
-    cond2 <- condition == levels(condition)[2]
-    diffs <- matrix(nrow = dims[1], ncol = dims[3])
-    for (k in seq_len(dims[3])) {
-        diffs[, k] <-
-            log2(rowMeans(infRepsArray[, cond2, k]) + pc) - log2(rowMeans(infRepsArray[,
-                                                                                       cond1, k]) + pc)
-    }
+  dims <- dim(infRepsArray)
+  cond1 <- condition == levels(condition)[1]
+  cond2 <- condition == levels(condition)[2]
+  diffs <- matrix(nrow = dims[1], ncol = dims[3])
+  for (k in seq_len(dims[3])) {
+    diffs[, k] <-
+      log2(rowMeans(infRepsArray[, cond2, k]) + pc) - log2(rowMeans(infRepsArray[
+        ,
+        cond1, k
+      ]) + pc)
+  }
 
-    # median over inferential replicates
-    rowMedians(diffs)
+  # median over inferential replicates
+  rowMedians(diffs)
 }
 
 
-#' Computes log fold change on the scaled inferential replicate counts.
-#' Scaled count for a given transcript in an inferential replicate is given by
+#' Computes log fold change for the CPM inferential replicate counts.
+#' CPM count for a given transcript in an inferential replicate is given by
 #' dividing the original count by the sum of counts of all transcripts in that
 #' inferential replicate
 #'
@@ -33,7 +35,7 @@ getLog2FC <- function(infRepsArray, condition, pc = 5) {
 #' @export
 #' @examples
 #' example(buildTSE)
-#' lfc <- getScaledLFC(tse, 'condition')
+#' lfc <- getScaledLFC(tse, "condition")
 #' @importFrom SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment rowTree
 #' @importFrom methods is
