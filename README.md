@@ -38,7 +38,7 @@ print(length(objS[['cut']]))
 ### Find the groups associated with the objective function that maximizes weighted log fold change
 ```{r}
 tree <- TreeSummarizedExperiment::rowTree(tse)
-lfc <- getTPMLFC(tse, "condition")
+lfc <- getCPMLFC(tse, "condition")
 descSize <- sapply(phangorn::Descendants(tree, seq(nrow(tse))), length)
 metric <- lfc/mcols(tse)[['meanInfRV']]*descSize
 objS <- solveForOptimalCut(tse, metVec = metric, type = 'max')
