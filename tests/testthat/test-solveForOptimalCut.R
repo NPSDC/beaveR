@@ -24,12 +24,12 @@ test_that("testsolveForOptimalCut", {
   expect_length(opt, 2)
   expect_equal(names(opt), c("cut", "optVal"))
 
-  expect_error(getScaledLFC(tse, "condition"))
+  expect_error(getCPMLFC(tse, "condition"))
   coldata <- data.frame(files = quantFiles, names = samples, condition = factor(rep(1:2,
     each = 6
   )))
   tse <- buildTSE(clustFile, coldata)
-  lfc <- getScaledLFC(tse, "condition")
+  lfc <- getCPMLFC(tse, "condition")
   expect_length(lfc, nrow(tse))
   metVec <- sizeDesc * abs(lfc) / SummarizedExperiment::mcols(tse)[["meanInfRV"]]
   opt <- solveForOptimalCut(tse, metVec, "max")

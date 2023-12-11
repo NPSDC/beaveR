@@ -30,5 +30,5 @@ inferential replicate
 }
 \examples{
 example(buildTSE)
-lfc <- getScaledLFC(tse, "condition")
+lfc <- getCPMLFC(tse, "condition")
 }

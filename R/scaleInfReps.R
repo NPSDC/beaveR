@@ -175,14 +175,14 @@ computeSizeFactors <- function(tse, type = "txp", lengthCorrect = TRUE,
 #' coldata <- data.frame(files = quantFiles, names = samples, condition = factor(rep(1:2, each = 6)))
 #' tse <- buildTSE(treeTermFile = clustFile, coldata = coldata)
 #' tse <- computeSizeFactors(tse)
-#' tse <- scaleInfReps(tse)
+#' tse <- scInfReps(tse)
 #'
 #' @export
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' assayNames assayNames<- assay assay<- assays assays<- mcols mcols<-
 #' @importFrom TreeSummarizedExperiment rowTree
 #' @importFrom stats median
-scaleInfReps <- function(tse, szMat = NULL, lengthCorrect = TRUE,
+scInfReps <- function(tse, szMat = NULL, lengthCorrect = TRUE,
                          saveMeanScaled = FALSE, quiet = FALSE,
                          force = FALSE, meanDepth = NULL) {
   if (!(is(tse, "SummarizedExperiment"))) {
@@ -272,4 +272,18 @@ infRepError <- function(infRepIdx) {
   if (length(infRepIdx) == 0) {
     stop("there are no inferential replicates in the assays of 'y'")
   }
+}
+
+# #function generator
+# defunct = function(msg = "This function is depreciated") function(...) return(stop(msg))
+
+#' @description
+#' `r lifecycle::badge("deprecated")`
+
+#' @rdname scInfReps
+#' @export
+scaleInfReps = function(tse, szMat = NULL, lengthCorrect = TRUE,
+                         saveMeanScaled = FALSE, quiet = FALSE,
+                         force = FALSE, meanDepth = NULL) {
+  lifecycle::deprecate_stop("0.99.1", "scaleInfReps(...)", "scInfReps()")
 }

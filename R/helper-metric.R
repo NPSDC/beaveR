@@ -35,7 +35,7 @@ getLog2FC <- function(infRepsArray, condition, pc = 5) {
 #' @export
 #' @examples
 #' example(buildTSE)
-#' lfc <- getScaledLFC(tse, "condition")
+#' lfc <- getCPMLFC(tse, "condition")
 #' @importFrom SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment rowTree
 #' @importFrom methods is

@@ -1,4 +1,4 @@
-test_that("scaledLFC", {
+test_that("cpmLFC", {
   dir <- system.file("extdata", package = "beaveR")
   dir <- file.path(dir, "brain_sim_nodtu_small_example")
   clustFile <- file.path(dir, "cluster_nwk.txt")
@@ -7,15 +7,15 @@ test_that("scaledLFC", {
   quantFiles <- file.path(quantDir, samples, "quant.sf")
   coldata <- data.frame(files = quantFiles, names = samples)
   tse <- buildTSE(clustFile, coldata)
-  expect_error(getScaledLFC(coldata, coldata))
-  expect_error(getScaledLFC(tse, "condition"))
+  expect_error(getCPMLFC(coldata, coldata))
+  expect_error(getCPMLFC(tse, "condition"))
 
   coldata <- data.frame(files = quantFiles, names = samples, condition = factor(rep(1:2,
     each = 6
   )))
   tse <- buildTSE(clustFile, coldata)
 
-  lfc <- getScaledLFC(tse, "condition")
+  lfc <- getCPMLFC(tse, "condition")
   tree <- TreeSummarizedExperiment::rowTree(tse)
   l <- length(tree$tip)
   expect_equal(length(lfc), length(tree$tip) + tree$Nnode)
