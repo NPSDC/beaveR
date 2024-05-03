@@ -13,9 +13,9 @@ findGenes <- function(tree, node, txpsAnn) {
 #' \code{buildTSE}
 #' @param node numeric index of the node whose information is required
 #' @param type either NULL or should be same as \code{type}
+#' in \code{phangorn::Descendants} aka \code{"tips", "all", "children")
 #' @param txpsAnn Optional, data.frame txp to gene mapping, with rownames set to
 #' transcripts and gene column set to 'gene_id'
-#' in \code{phangorn::Descendants}
 #'
 #' @return data.frame
 #'
