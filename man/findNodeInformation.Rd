@@ -14,11 +14,8 @@ findNodeInformation(tse, node, type = NULL, txpsAnn = NULL)
 
 \item{node}{numeric index of the node whose information is required}
 
-\item{type}{either NULL or should be same as \code{type}}
-
 \item{txpsAnn}{Optional, data.frame txp to gene mapping, with rownames set to
-transcripts and gene column set to 'gene_id'
-in \code{phangorn::Descendants}}
+transcripts and gene column set to 'gene_id'}
 }
 \value{
 data.frame
